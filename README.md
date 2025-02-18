@@ -34,6 +34,7 @@
 
 ### 4️⃣ 아바타 생성
 - 게임사 오픈 API를 통해 게임내의 본인 아바타를 사용
+- 아바타 편집 : avatar.baram.nexon.com/Coordi/RenderAvatar와 같은 사이트트 활용
  
 
 ## 🎯 응용 아이디어

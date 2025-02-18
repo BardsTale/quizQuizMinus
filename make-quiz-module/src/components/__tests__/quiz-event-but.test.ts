@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import eventBus from '../composables/survey-event-bus'
+import eventBus from '../../composables/quiz-event-bus'
 
 test('이벤트 버스에 성공적으로 등록(on) 시, 버스 리스트에서 확인할 수 있어야 함.', () => {
   eventBus.on('test_event',()=>{return 'chill~'},'0');
