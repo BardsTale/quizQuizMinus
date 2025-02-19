@@ -12,4 +12,5 @@
 2. 직접 아이템명을 기입하여 착용.
 
 ## 🎭아바타 모듈 데모
+![alt text](demo_image.png)
 ### [데모 페이지](https://bardstale.github.io/avatar-module/ "아바타 모듈 깃헙 페이지")
