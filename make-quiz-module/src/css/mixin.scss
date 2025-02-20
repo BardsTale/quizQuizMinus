@@ -1,0 +1,87 @@
+$txt-normal: #565656;
+$black: #000000;
+$white: #ffffff;
+$grey: #262626;
+$grey-1: #262626;
+$grey-2: #545454;
+$grey-3: #767676;
+$grey-4: #999999;
+$grey-5: #bbbbbb;
+$grey-6: #d7d7d7;
+$grey-7: #ededed;
+$grey-8: #f7f7f7;
+$grey-9: #666666;
+$grey05: #bbbbbb;
+$grey06: #d7d7d7;
+$grey07: #ededed;
+$grey08: #f7f7f7;
+$positive: #339f63;
+$primary: #2e9dd1;
+$negative: #ed1c24;
+$orange: #ff6b23;
+$orange-3: #f37e11;
+$orange-10: #f27321;
+$warning: #fda306;
+$purple: #800080;
+$green: #2b8252;
+$green-2: #339f63;
+$green-3: #eaf5ef;
+$blue: #137aaf;
+$blue-2: #2e9dd1;
+$blue-3: #f1f7fb;
+$blue-10: #0080b6;
+$brown: #6e6058;
+$brown-2: #af9582;
+$brown-2: #af9582;
+$brown-4: #ac947a;
+$beige: #fff6e6;
+$red: red;
+
+@mixin flex_row_start {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+@mixin flex_row_between {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex_row_center {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex_col_center_start {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+@mixin flex_col_center_center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex_row_start_between {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  justify-content: space-between;
+}
+
+.title{
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+  font-weight: bold;
+}

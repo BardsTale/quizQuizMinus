@@ -1,0 +1,293 @@
+<template>
+  <table class="quiz-table">
+    <tbody>
+      <tr>
+        <th class="body2">
+          <span class="required">기간 설정</span>
+        </th>
+        <td colspan="3">
+          <div class="row-4">
+            <q-input
+              :disabled="[QuizStatus.Started, QuizStatus.Extended, QuizStatus.Stopped, QuizStatus.EndedEarly, QuizStatus.Ended].indexOf(props.quizStat) > -1"
+              :class="{disabled: [QuizStatus.Started, QuizStatus.Extended, QuizStatus.Stopped, QuizStatus.EndedEarly, QuizStatus.Ended].indexOf(props.quizStat) > -1}"
+              borderless
+              v-model="startDate"
+              class="inp_date normal"
+              style="margin-right: 4px"
+            >
+              <template v-slot:append>
+                <q-icon
+                  :class="{disabled: [QuizStatus.Started, QuizStatus.Extended, QuizStatus.Stopped, QuizStatus.EndedEarly, QuizStatus.Ended].indexOf(props.quizStat) > -1}"
+                  name="date_range"
+                  class="icon_svg cursor-pointer"
+                >
+                  <q-popup-proxy
+                    v-if="[QuizStatus.Started, QuizStatus.Extended, QuizStatus.Stopped, QuizStatus.EndedEarly, QuizStatus.Ended].indexOf(props.quizStat) === -1"
+                    ref="qDateProxyFrom"
+                    cover
+                    transition-show="scale"
+                    transition-hide="scale"
+                  >
+                    <q-date
+                      minimal
+                      mask="YYYY.MM.DD"
+                      v-model="startDate"
+                      :options="disablePastDates"
+                      @update:modelValue="()=>{($refs.qDateProxyFrom as any).hide()}"
+                    >
+                    </q-date>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+            <div class="tilde">
+              <span>~</span>
+            </div>
+            <q-input
+              :readonly="[QuizStatus.EndedEarly, QuizStatus.Ended].indexOf(props.quizStat) > -1"
+              :class="{disabled: [QuizStatus.EndedEarly, QuizStatus.Ended].indexOf(props.quizStat) > -1}"
+              borderless
+              v-model="endDate"
+              class="inp_date normal"
+              style="margin-right: 4px"
+            >
+              <template v-slot:append>
+                <q-icon
+                  :class="{disabled: [QuizStatus.EndedEarly, QuizStatus.Ended].indexOf(props.quizStat) > -1}"
+                  name="date_range"
+                  class="icon_svg cursor-pointer"
+                >
+                  <q-popup-proxy
+                    v-if="[QuizStatus.EndedEarly, QuizStatus.Ended].indexOf(props.quizStat) === -1"
+                    ref="qDateProxyFrom"
+                    cover
+                    transition-show="scale"
+                    transition-hide="scale"
+                  >
+                    <q-date
+                      minimal
+                      mask="YYYY.MM.DD"
+                      v-model="endDate"
+                      :options="disableBeforeStartDate"
+                      @update:modelValue="()=>{($refs.qDateProxyFrom as any).hide()}"
+                    >
+                    </q-date>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <th class="body2">
+          <span class="required">익명여부</span>
+        </th>
+        <td>
+          <q-radio
+            v-model="quizCandAnymYn"
+            val="Y"
+            label="Y"
+            color="black"
+            class="check_to_radio"
+          />
+          <q-radio
+            v-model="quizCandAnymYn"
+            val="N"
+            label="N"
+            color="black"
+            class="check_to_radio"
+            style="margin-right: 10px"
+          />
+        </td>
+        <th class="body2">
+          <span class="required">참여 후 수정</span>
+        </th>
+        <td>
+          <q-radio
+            :disable="[QuizStatus.EndedEarly, QuizStatus.Ended].indexOf(props.quizStat) > -1"
+            v-model="rspnModfPosbYn"
+            val="Y"
+            label="Y"
+            color="black"
+            class="check_to_radio"
+          />
+          <q-radio
+            :disable="[QuizStatus.EndedEarly, QuizStatus.Ended].indexOf(props.quizStat) > -1"
+            v-model="rspnModfPosbYn"
+            val="N"
+            label="N"
+            color="black"
+            class="check_to_radio"
+            style="margin-right: 10px"
+          />
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</template>
+
+<script lang="ts" setup>
+import { computed, watch, onMounted, onUnmounted } from 'vue';
+import { date } from 'quasar';
+import type { QuizInterface } from '@/composables/quiz-interface';
+import { QuizStatus } from '@/composables/quiz-interface';
+import eventBus from '@/composables/quiz-event-bus';
+import { useQuizStore } from '@/stores/quiz-store';
+const store = useQuizStore();
+
+/* 프롭 선언 */
+const props = defineProps({
+  filterData:{ // 등록 퀴즈일 경우 데이터
+    type: Object,
+    required: true
+  },
+  quizStat:{ // 퀴즈 상태
+    type: Number,
+    required: true
+  },
+});
+
+/* 기간 설정 */
+const { formatDate } = date;
+const today = new Date();
+
+// 시작일
+const startDate = computed({
+  get(){
+    return formatDate(store.startDate || today, 'YYYY.MM.DD');
+  },
+  set(value){
+    return store.setStartDate(formatDate(value, 'YYYY.MM.DD'));
+  }
+});
+
+// 종료일
+const endDate = computed({
+  get(){
+    return formatDate(store.endDate || today, 'YYYY.MM.DD');
+  },
+  set(value){
+    return store.setEndDate(formatDate(value, 'YYYY.MM.DD'));
+  }
+});
+
+// 시작일 - 오늘 이전 날짜 비활성화
+const disablePastDates = (date: string) => {
+  today.setHours(0, 0, 0, 0); // 오늘 자정 기준
+  return new Date(date) >= today;
+};
+
+// 종료일 - 시작일 이전 날짜 비활성화
+const disableBeforeStartDate = (date: string) => {
+  if (!startDate.value) return true; // 시작일이 설정되지 않았으면 제한 없음
+  const start = new Date(startDate.value);
+  start.setHours(0, 0, 0, 0); // 시작일 자정 기준
+  return new Date(date) >= start;
+};
+
+
+/* 라디오 버튼 컨트롤 */
+// 익명 여부
+const quizCandAnymYn = computed({
+  get(){
+    return store.quizCandAnymYn;
+  },
+  set(value){
+    return store.setQuizCandAnymYn(value);
+  }
+});
+
+// 참여 후 수정 공개 여부
+const rspnModfPosbYn = computed({
+  get(){
+    return store.rspnModfPosbYn;
+  },
+  set(value){
+    return store.setRspnModfPosbYn(value);
+  }
+});
+
+
+// 파라미터 생성 메서드
+const createSearchParams = (isPreview: boolean): QuizInterface => {
+  const params: QuizInterface = {
+    tempYn : 'N', // 디폴트는 N 퀴즈 저장 단계에서 변경
+    quizStartDate : startDate.value,
+    quizEndDate : endDate.value,
+    quizCandAnymYn : store.quizCandAnymYn,
+    rspnModfPosbYn : store.rspnModfPosbYn,
+    quizPageList: [], // 퀴즈 페이지 리스트(이벤트 버스에서 다음 이벤트에서 값을 담음)
+    attachments: []
+  };
+  // 미리보기일 경우 isPreview 삽입.
+  if(isPreview) params.isPreview = true;
+  return params;
+}
+
+/* 이벤트 버스 사용. */
+// 컴포넌트가 마운트될 때 이벤트 리스너 등록
+onMounted(() => {
+  eventBus.on('createSearchParams', createSearchParams, '0-0');
+});
+
+// 컴포넌트가 언마운트될 때 이벤트 리스너 해제
+onUnmounted(() => {
+  eventBus.off('createSearchParams');
+});
+
+
+/* 등록 퀴즈일 경우 데이터 바인딩 */
+watch(() => props.filterData, () => {
+  startDate.value = props.filterData.quizStartDate;
+  endDate.value = props.filterData.quizEndDate;
+  quizCandAnymYn.value = props.filterData.quizCandAnymYn;
+  rspnModfPosbYn.value = props.filterData.rspnModfPosbYn;
+},{ deep: true });
+</script>
+
+<style lang="scss" scoped>
+.quiz-table {
+  background-color: white;
+  width: 100%;
+  border-collapse: collapse;
+  border-top: 1px solid #ccc;
+  tr {
+    height: 58px;
+  }
+  th {
+    padding: 0 0 0 24px;
+    width: 180px !important;
+    border-bottom: 1px solid #ccc;
+    .required::after {
+      display: inline-block;
+      content: '*';
+      padding-left: 5px;
+      color: #ed1c24;
+    }
+  }
+  td {
+    padding: 0 10px;
+    border-bottom: 1px solid #ccc;
+    &.size_40 {
+      width: 40%;
+    }
+  }
+  th {
+    text-align: left;
+    background-color: #f2f2f2;
+    width: 120px;
+  }
+}
+.row-4 {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0 10px;
+}
+
+.inp_date {
+  min-width: 110px;
+  width: 110px;
+}
+</style>
