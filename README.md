@@ -55,8 +55,8 @@
 
 ## 🕹️개발 환경 구성
 ### Frontend
-vue, nuxt, quaser, tailwind, scss, jest, cypress, vite 
+vue, nuxt, quaser, tailwind, scss, jest, cypress, vite, GraphQL(Apollo Client)
 ### BFF
-node.js  
+node.js, GraphQL(Apollo Server)
 ### Backend
 Supabase
