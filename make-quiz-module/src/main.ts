@@ -9,6 +9,7 @@ import langKr from 'quasar/lang/ko-KR';
 import { Quasar, Dialog } from 'quasar';
 import 'quasar/dist/quasar.sass'; // Quasar의 기본 스타일
 import '@quasar/extras/material-icons/material-icons.css'; // 선택한 아이콘 패키지
+import 'tailwindcss';
 const app = createApp(App)
 app.use(Quasar,
   {

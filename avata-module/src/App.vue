@@ -1,25 +1,22 @@
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <AvataDemo
-        @defineAvatar="setAvatarInfo"
-      />
-    </div>
-  </header>
-
   <main>
+    <AvataDemo
+      @defineAvatar="setAvatarInfo"
+    />
     <AvataView
       :serverName="serverName"
       :charName="charName"
     />
   </main>
+  <bottom>
+    <AvataList/>
+  </bottom>
 </template>
 
 <script setup>
 import AvataDemo from './components/AvataDemo.vue';
 import AvataView from './components/AvataView.vue'
+import AvataList from './components/AvataList.vue'
 import { ref } from 'vue';
 
 /* 아바타 조회 로직 */
@@ -36,30 +33,13 @@ const setAvatarInfo = (serverInfo, charInfo) => {
 </script>
 
 <style scoped>
-header {
-  line-height: 1.5;
+main {
+  width: 400px;
+  margin-right: 50px;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+bottom {
+  width: 900px;
+  margin-top: 50px;
 }
 </style>

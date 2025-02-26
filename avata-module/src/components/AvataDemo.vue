@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="relative">
     <h1 class="text-3xl font-bold underline !mb-6">
       바람의나라 아바타 데모
     </h1>
@@ -22,7 +22,7 @@
         class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
       />
     </div>
-    <div class="relative">
+    <div class="relative !mb-3">
       <button
         v-if="!isSearching"
         @click="() => searchValidation() && searchThrottle(searchBaramChar,500)"
@@ -51,6 +51,7 @@ const emits = defineEmits(['defineAvatar']);
 const serverName = ref('');
 const charName = ref('');
 const isSearching = ref(false);
+
 
 // 검색 함수
 const searchBaramChar = ()=>{
@@ -120,7 +121,6 @@ const searchValidation = () => {
   }
   return true
 }
-
 </script>
 
 <style>
