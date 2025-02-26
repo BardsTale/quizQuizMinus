@@ -43,6 +43,7 @@
 
 <script setup>
 import { ref } from 'vue';
+
 /* emit 선언 */
 const emits = defineEmits(['defineAvatar']);
 
@@ -64,8 +65,9 @@ const searchBaramChar = ()=>{
   // 헤더 설정
   const headers = {
   'Accept': 'application/json',
-  'x-nxopen-api-key': 'test_6e43020fd5dcbb6c5306d35c6bc027cdd223991177bf295b7322e5f5c49de3daefe8d04e6d233bd35cf2fabdeb93fb0d',
+  'x-nxopen-api-key': import.meta.env.VITE_API_KEY,
 };
+
 
   // url 설정
   const url = new URL('https://open.api.nexon.com/baram/v1/id');
